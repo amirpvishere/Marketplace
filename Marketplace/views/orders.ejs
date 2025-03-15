@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders</title>
+    <link rel="stylesheet" href="/orders.css">
+</head>
+<body>
+    <div class="orders-container">
+        <h1>Your Orders</h1>
+
+        <% if (orders.length > 0) { %>
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Payment Method</th>
+                        <th>Amount Paid</th>
+                        <th>Total Price</th>
+                        <th>Order Date</th>
+                        <th>Status</th>  
+                        <th>Action</th>  
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order => { 
+                        const orderTime = new Date(order.createdAt);
+                        const now = new Date();
+                        const sixHours = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+                        const canCancel = (now - orderTime) < sixHours && (order.status === "pending" || order.status === "in_process"); // ✅ Check correct statuses
+                    %>
+                        <tr>
+                            <td><%= order.paymentMethod %></td>
+                            <td>$<%= order.amountPaid.toFixed(2) %></td>
+                            <td>$<%= order.totalPrice.toFixed(2) %></td>
+                            <td><%= orderTime.toLocaleString() %></td>
+                            <td style="color: 
+                                <%= order.status === 'completed' ? 'green' : 
+                                    order.status === 'cancelled' ? 'red' : 'orange' %>;">
+                                <%= order.status %> 
+                            </td>
+                            <td>
+                                <% if (canCancel) { %>
+                                    <a href="#" class="cancel-btn" onclick="cancelOrder('<%= order._id %>')" style="color: red;">Cancel</a>
+                                <% } else { %>
+                                    <span style="color: gray;">Not Cancellable</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+            
+        <% } else { %>
+            <p class="empty-orders">No orders found.</p> 
+        <% } %>
+
+        <a href="/" class="back-link">Back to Products</a> 
+    </div>
+
+    <script src="/orders.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.orders-container {
+    max-width: 1000px;  
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 26px; 
+    margin-bottom: 20px;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.order-table th {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.order-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap; 
+}
+
+
+.order-table th:nth-child(6),
+.order-table td:nth-child(6) {
+    width: 200px; 
+}
+
+.order-table td:nth-child(5) {
+    min-width: 120px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.back-link:hover {
+    background: #0056b3;
+}
+
+.cancel-btn {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    text-decoration: underline;
+}
+
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-in-process {
+    color: #ff9800; 
+    font-weight: bold;
+}
+
+.status-completed {
+    color: green;
+    font-weight: bold;
+}
+
+.status-cancelled {
+    color: red;
+    font-weight: bold;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="/cart.css">
+</head>
+<body>
+    <div class="cart-container">
+        <h1>Shopping Cart</h1>
+        
+        <% if (cart && cart.items && cart.items.length > 0) { %> 
+            <ul class="cart-items">
+                <% let totalPrice = 0; %>
+                <% cart.items.forEach(item => { 
+                    totalPrice += item.product.price * item.quantity;
+                %>
+                    <li class="cart-item">
+                        <span class="product-name"><%= item.product.name %></span>
+                        <span class="product-price">$<%= item.product.price %> x <%= item.quantity %></span>
+                        <button class="delete-btn" onclick="deleteItem('<%= item.product._id %>')">🗑️</button>
+                    </li>
+                <% }); %>
+            </ul>
+
+            <!-- SHOW TOTAL PRICE -->
+            <div class="total">
+                <strong>Total Price: </strong> $<%= totalPrice.toFixed(2) %>
+            </div>
+
+            <!-- CHECKOUT FORM -->
+            <form action="/checkout" method="GET">
+                <input type="hidden" name="userId" value="<%= cart.userId %>">
+                <input type="hidden" name="totalPrice" value="<%= totalPrice.toFixed(2) %>">
+                <button type="submit" class="checkout-btn">Proceed to Checkout</button>
+            </form>
+        <% } else { %>
+            <p class="empty-cart">Your cart is empty.</p>
+        <% } %>
+
+        <!--BACK TO PRODUCT BUTTON -->
+        <a href="/" class="back-link">Back to Products</a>
+    </div>
+
+    <script src="/cart.js"></script>
+
+</body>
+</html>

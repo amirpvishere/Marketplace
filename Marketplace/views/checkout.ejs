@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/checkout.css">
+</head>
+<body>
+    <div class="checkout-container">
+        <h1>Checkout</h1>
+
+        <form action="/process-payment" method="POST">
+            <input type="hidden" name="userId" value="<%= userId %>">
+            <input type="hidden" name="totalPrice" value="<%= totalPrice %>">
+        
+            <label for="card-number">Card Number:</label>
+            <input type="text" id="card-number" name="cardNumber" required maxlength="25" placeholder="1234 - 5678 - 9101 - 1121" required>
+        
+            <label>Payment Method:</label>
+            <div class="radio-group">
+                <input type="radio" id="finance" name="paymentMethod" value="finance" required>
+                <label for="finance">Finance</label>
+        
+                <input type="radio" id="cash" name="paymentMethod" value="cash" required>
+                <label for="cash">Cash</label>
+            </div>
+        
+            <div id="payment-details">
+                <label>Total Payment:</label>
+                <span id="payment-amount">$<%= totalPrice.toFixed(2) %></span>
+            </div>
+        
+            <label for="amount">Amount to Pay:</label>
+            <input type="number" id="amount" name="amount" step="0.01" required>
+        
+            <button type="submit" class="checkout-btn">Submit Payment</button>
+        </form>
+
+        <a href="/cart/<%= userId %>" class="back-link">Back to Cart</a>
+    </div>
+
+    <script>
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                let totalPrice = <%= totalPrice %>;
+                let paymentText = document.getElementById('payment-amount');
+
+                if (this.value === "finance") {
+                    paymentText.innerHTML = `$${(totalPrice / 12).toFixed(2)} per month`;
+                } else {
+                    paymentText.innerHTML = `$${totalPrice.toFixed(2)}`;
+                }
+            });
+        });
+
+        document.getElementById('card-number').addEventListener('input', function (event) {
+            let input = event.target.value.replace(/\D/g, ''); 
+            let formatted = input.replace(/(\d{4})(?=\d)/g, '$1 - '); 
+
+            if (formatted.length > 25) {
+                formatted = formatted.slice(0, 22);
+            }
+
+            event.target.value = formatted;
+        });
+    </script>
+</body>
+</html>

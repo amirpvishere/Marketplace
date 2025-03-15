@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Welcome to the home page</h1>
+    
+    <div class="button-container">
+        <% if (session && session.userId) { %>
+            <a href="/logout" class="btn btn-red">Logout</a>
+        <% } else { %>
+            <a href="/login" class="btn btn-blue">Login</a>
+            <a href="/register" class="btn btn-blue">Register</a>
+        <% } %>
+    </div>
+
+    <% if (session && session.userId) { %>
+        <div class="header-buttons">
+            <a href="/cart/<%= session.userId %>" class="btn btn-cart">View Cart</a>
+            <a href="/orders/<%= session.userId %>" class="btn btn-orders">View Orders</a>
+        </div>
+    <% } %>
+
+    <h2>Products</h2>
+
+    <% if (session && session.userId) { %>
+        <div class="add-product-container">
+            <button class="add-product-btn" onclick="openModal()">Add a Product</button>
+        </div>
+    <% } %>
+
+    <% if (products && products.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Stock Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(product => { %>
+                    <tr>
+                        <td>
+                            <% if (product.inStock > 0) { %>
+                                <%= product.name %>
+                            <% } else { %>
+                                <s><%= product.name %></s> 
+                            <% } %>
+                        </td>
+                        <td><%= product.description %></td>
+                        <td>$<%= product.price %></td>
+                        <td style="color: <%= product.inStock > 0 ? 'green' : 'red' %>;">
+                            <% if (product.inStock > 0) { %>
+                                <%= product.inStock %> in stock
+                            <% } else { %>
+                                Out of Stock
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (session && session.userId && product.inStock > 0) { %>
+                                <button class="add-to-cart" onclick="addToBag('<%= product._id %>')">+</button>
+                            <% } else if (!session.userId) { %>
+                                <span style="color: gray;">Login to add to cart</span>
+                            <% } else { %>
+                                <span class="out-of-stock">Unable to Add to Cart</span> 
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No products available.</p>
+    <% } %>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add a Product</h2>
+            <form id="productForm">
+                <label for="name">Product Name:</label>
+                <input type="text" id="name" name="name" required><br>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea><br>
+
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" step="0.01" required><br>
+
+                <label for="stock">Number of Items:</label>
+                <input type="number" id="stock" name="inStock" min="0" required><br>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
